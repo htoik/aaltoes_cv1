@@ -1,6 +1,6 @@
 # Aaltoes CV1
 
-Contains competition stuff
+Contains competition stuff from the Aaltoes CV1 competition. We joined for the burgers.
 
 ## Installation
 
