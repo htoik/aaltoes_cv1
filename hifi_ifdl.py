@@ -1,13 +1,18 @@
-from HiFi_Net import HiFi_Net 
 from PIL import Image
 import numpy as np
+from dataloaders import get_aaltoes_dataloaders
 
-HiFi = HiFi_Net()
-img_path = 'asset/sample_1.jpg'
+def main():
+    train_loader, test_loader = get_aaltoes_dataloaders()
 
-res3, prob3 = HiFi.detect(img_path)
-HiFi.detect(img_path, verbose=True)
+    for batch in train_loader:
+        images = batch["image"]
+        masks = batch["mask"]
+        # originals = batch["original"]
+        print("Batch images shape:", images.shape)
+        print("Batch masks shape:", masks.shape)
+        # print("Batch originals shape:", originals.shape)
+        break
 
-binary_mask = HiFi.localize(img_path)
-binary_mask = Image.fromarray((binary_mask*255.).astype(np.uint8))
-binary_mask.save('pred_mask.png')
+if __name__ == "__main__":
+    main()
