@@ -8,6 +8,7 @@ Contains competition stuff from the Aaltoes CV1 competition. We joined for the b
 git clone --recursive https://github.com/htoik/aaltoes_cv1.git
 conda env create -f conda/environment.yml
 . source.sh
+pip install -e .
 ```
 
 ## 

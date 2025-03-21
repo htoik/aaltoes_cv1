@@ -1,6 +1,6 @@
 [submodule "ext/ManTraNet"]
 	path = ext/ManTraNet
 	url = https://github.com/ISICV/ManTraNet
-[submodule "ext/HiFi_IFDL"]
+[submodule "ext/HiFi-IFDL"]
 	path = ext/HiFi_IFDL
-	url = https://github.com/CHELSEA234/HiFi_IFDL
+	url = https://github.com/htoik/HiFi_IFDL.git
