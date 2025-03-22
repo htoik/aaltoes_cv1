@@ -1,2 +1,3 @@
 data_path: ~/workspace/aaltoes_cv1
-model_path: ./models
+hifi_models_path: ./models
+center_path: ./ext/HiFi_IFDL/center

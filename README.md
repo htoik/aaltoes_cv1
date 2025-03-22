@@ -9,6 +9,13 @@ git clone --recursive https://github.com/htoik/aaltoes_cv1.git
 conda env create -f conda/environment.yml
 . source.sh
 pip install -e .
+
+# at some point you do this too, good luck
+#conda install pytorch torchvision cudatoolkit=12.6
+# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+
+# just try various things until it works
 ```
 
 ## 
