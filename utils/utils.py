@@ -4,6 +4,9 @@ import shutil
 import numpy as np
 import pandas as pd
 import random
+import matplotlib.pyplot as plt
+import torch
+import torchmetrics
 
 def create_validation_split(idxs, p=0.2):
     l = len(idxs)
@@ -31,6 +34,22 @@ def create_smaller_dataset(src_path, dst_path, *args, size=100, id_func=lambda x
             dfp = os.path.join(dstp, f)
             shutil.copyfile(sfp, dfp)
     return selected_ids
+
+def create_dataset_list(src_path, dst_fp, name, *args):
+    if not os.path.exists(dst_fp):
+        os.mkdir(dst_fp)
+    files_list = []
+    for a in args:
+        src_fp = os.path.join(src_path, a)
+        files = []
+        for fn in os.listdir(src_fp):
+            files.append(os.path.join(src_fp, fn))
+        files_list.append(files)
+    dst_file = os.path.join(dst_fp, f"{name}_{a}_list.txt")
+    with open(dst_file, 'w') as f:
+        csv_rows = [','.join(files) for files in zip(*files_list)]
+        f.write('\n'.join(csv_rows))
+        f.write('\n')
 
 # From: https://www.kaggle.com/competitions/aaltoes-2025-computer-vision-v-1/data
 def mask2rle(img):
@@ -60,3 +79,17 @@ def rle2mask(mask_rle: str, label=1, shape=(256, 256)):
     for lo, hi in zip(starts, ends):
         img[lo:hi] = label
     return img.reshape(shape) 
+
+def calculate_iou_jaccard(model, data_loader, device):
+    jaccard_index = torchmetrics.JaccardIndex(task='binary',num_classes=1)
+    jaccard_index = jaccard_index.to(device)
+    with torch.no_grad():
+        for i,(images, labels) in enumerate(data_loader):
+            images = images.to(device)
+            labels = labels.to(device)
+            labels = (labels[:,0,:,:]).unsqueeze(1).to(torch.int64)
+            outputs = model(images)['out']
+            preds = torch.argmax(outputs, dim=1).unsqueeze(1)
+            jaccard_index.update(preds, labels)
+    avg_jaccard = jaccard_index.compute()
+    return avg_jaccard
