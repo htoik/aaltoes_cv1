@@ -4,3 +4,6 @@
 [submodule "ext/HiFi-IFDL"]
 	path = ext/HiFi_IFDL
 	url = https://github.com/htoik/HiFi_IFDL.git
+[submodule "ext/TruFor"]
+	path = ext/TruFor
+	url = https://github.com/grip-unina/TruFor
