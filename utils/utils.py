@@ -1,6 +1,34 @@
 import cv2
+import os
+import shutil
 import numpy as np
 import pandas as pd
+import random
+
+def create_validation_split(idxs, p=0.2):
+    l = len(idxs)
+    val_l = int(l * p)
+    val_idxs = random.sample(idxs, val_l)
+    train_idxs = [i for i in idxs if i not in val_idxs]
+    return train_idxs, val_idxs
+
+def create_smaller_dataset(src_path, dst_path, *args, size=100, id_func=lambda x: int(x.split('_')[1].split('.')[0])):
+    if not os.path.exists(dst_path):
+        os.mkdir(dst_path)
+    args = list(args)
+    ids = [id_func(x) for x in os.listdir(os.path.join(src_path, args[0]))]
+    selected_ids = random.sample(ids, size)
+    for a in args:
+        srcp = os.path.join(src_path, a)
+        dstp = os.path.join(dst_path, a)
+        if not os.path.exists(dstp):
+            os.makedirs(dstp, exist_ok=True)
+        for f in os.listdir(srcp):
+            if id_func(f) not in selected_ids:
+                continue
+            sfp = os.path.join(srcp, f)
+            dfp = os.path.join(dstp, f)
+            shutil.copyfile(sfp, dfp)
 
 # From: https://www.kaggle.com/competitions/aaltoes-2025-computer-vision-v-1/data
 def mask2rle(img):

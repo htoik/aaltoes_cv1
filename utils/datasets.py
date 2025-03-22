@@ -19,18 +19,23 @@ class AaltoesDataset(Dataset):
             dict3 = [(int(img.split('_')[1].split('.')[0]), img) for img in self.orig_dir]
 
             ks = set(dict1.keys()).add(set(dict2.keys(()))).add(set(dict3.keys(())))
-            self.dataset = dict((k, (None, None, None)) for k in ks)
-            for idx, img in dict1: self.dataset[idx][0] = img
-            for idx, img in dict2: self.dataset[idx][1] = img
-            for idx, img in dict3: self.dataset[idx][2] = img
+            self.img_idxs = list(range(len(ks)))
+            self.img_to_idxs = dict(zip(sorted(ks), self.img_idxs))
+
+            self.dataset = dict((self.img_to_idxs[k], (None, None, None)) for k in ks)
+            for idx, img in dict1: self.dataset[self.img_to_idxs[idx]][0] = img
+            for idx, img in dict2: self.dataset[self.img_to_idxs[idx]][1] = img
+            for idx, img in dict3: self.dataset[self.img_to_idxs[idx]][2] = img
         elif mode == "test":
             self.image_dir = os.path.join(root_dir, "test", "test", "images")
             # self.image_files = sorted(os.listdir(self.image_dir))
             dict1 = [(int(img.split('_')[1].split('.')[0]), img) for img in self.image_dir]
             ks = set(dict1.keys()).add(set(dict2.keys(()))).add(set(dict3.keys(())))
+            self.img_idxs = list(range(len(ks)))
+            self.img_to_idxs = dict(zip(sorted(ks), self.img_idxs))
 
-            self.dataset = dict((k, (None, None, None)) for k in ks)
-            for idx, img in dict1: self.dataset[idx][0] = img
+            self.dataset = dict((self.img_to_idxs[k], (None, None, None)) for k in ks)
+            for idx, img in dict1: self.dataset[self.img_to_idxs[idx]][0] = img
         else:
             raise ValueError("Mode must be 'train' or 'test'")
 
